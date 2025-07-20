@@ -1,272 +1,342 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premium car rental</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', Arial, sans-serif;
-      background: #191A1E;
-      min-height: 100vh;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .container {
-      width: 100vw;
-      max-width: 430px;
-      min-height: 100vh;
-      background: #191A1E;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    /* Задний фон-паттерн */
-    .bg-pattern {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      background: url('data:image/svg+xml;utf8,<svg width="430" height="932" viewBox="0 0 430 932" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="430" height="932" fill="%23191A1E"/><path d="M0 0L430 932" stroke="%2339393F" stroke-width="40" opacity="0.15"/><path d="M430 0L0 932" stroke="%2339393F" stroke-width="40" opacity="0.15"/><path d="M215 0V932" stroke="%2339393F" stroke-width="20" opacity="0.08"/></svg>') center/cover no-repeat;
-    }
-    .header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 32px 24px 0 24px;
-      font-size: 16px;
-      color: #fff;
-      position: relative;
-      z-index: 10;
-    }
-    .header .brand {
-      color: #FFD600;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      font-size: 22px;
-      text-transform: uppercase;
-      text-align: left;
-      background: rgba(25, 26, 30, 0.85);
-      padding: 6px 16px 6px 0;
-      border-radius: 8px;
-    }
-    .header .skip {
-      color: #fff;
-      opacity: 0.7;
-      font-size: 15px;
-      font-weight: 400;
-    }
-    .dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 16px 0 0 0;
-      gap: 6px;
-    }
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #393A3F;
-      opacity: 0.7;
-    }
-    .dot.active {
-      background: #FFD600;
-      opacity: 1;
-    }
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 0 24px;
-      margin-top: 16px;
-    }
-    .title {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      line-height: 1.1;
-    }
-    .subtitle {
-      font-size: 16px;
-      color: #B0B0B0;
-      font-weight: 400;
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
-    .car-image {
-      width: 130%;
-      max-width: 500px;
-      margin: 0;
-      display: block;
-      position: relative;
-      z-index: 2;
-      margin-bottom: 24px;
-      left: -18%;
-      top: 52px;
-      transition: transform 0.5s cubic-bezier(.7,0,.3,1);
-    }
-    .car-image.animate {
-      transform: translateX(100vw) scale(0.8);
-      transition: transform 1s ease-in-out;
-    }
-    
-    .yellow-fill {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #FFD700, #FFA500);
-      z-index: 9999;
-      transform: translateY(100%);
-      transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      pointer-events: none;
-      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
-      border-radius: 50% 50% 0 0;
-    }
-    
-    .yellow-fill.active {
-      transform: translateY(0);
-      border-radius: 0;
-      filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
-    }
-    .footer {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 0 24px 0;
-      background: transparent;
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      z-index: 20;
-    }
-    .get-started-btn {
-      width: 100%;
-      max-width: 350px;
-      padding: 16px 0;
-      background: #FFD600;
-      color: #191A1E;
-      font-size: 18px;
-      font-weight: 700;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .get-started-btn:active {
-      background: #ffe066;
-    }
-    /* Анимированный жёлтый фон */
-    .overlay {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      width: 100px;
-      height: 100px;
-      background: #FFD600;
-      border-radius: 50%;
-      z-index: 1000;
-      transform: translate(-50%, 0) scale(0);
-      transition: transform 0.7s cubic-bezier(.7,0,.3,1);
-      pointer-events: none;
-    }
-    .overlay.active {
-      transform: translate(-50%, 0) scale(20);
-      transition: transform 0.7s cubic-bezier(.7,0,.3,1);
-    }
-    @media (max-width: 500px) {
-      .container {
-        max-width: 100vw;
-      }
-      .main {
-        padding: 0 12px;
-      }
-      .footer {
-        padding: 12px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Такси Престиж | Вход и регистрация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --yellow: #FFD600;
+            --yellow-dark: #FFC400;
+            --black: #191A1E;
+            --gray: #f5f5f5;
+            --input-bg: #232323;
+            --input-border: #FFD600;
+        }
+        body {
+            background: var(--black);
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .taxi-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--black) 100%);
+            opacity: 0.08;
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(25,26,30,0.98);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 370px;
+            width: 100%;
+            padding: 40px 28px 32px 28px;
+            margin: 32px 0;
+            animation: fadeInUp 1s cubic-bezier(.7,0,.3,1);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .logo-icon {
+            font-size: 2.2rem;
+            color: var(--yellow);
+            margin-right: 10px;
+            animation: taxiWiggle 1.5s infinite alternate;
+        }
+        @keyframes taxiWiggle {
+            0% { transform: rotate(-7deg); }
+            100% { transform: rotate(7deg); }
+        }
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--yellow);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        h1 {
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--yellow);
+            font-size: 1rem;
+        }
+        input[type="text"], input[type="password"], input[type="tel"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: #fff;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus, input[type="tel"]:focus {
+            border-color: var(--yellow-dark);
+        }
+        button {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(90deg, var(--yellow) 60%, var(--yellow-dark) 100%);
+            color: var(--black);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(255,214,0,0.10);
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 1px;
+        }
+        button:active {
+            background: var(--yellow-dark);
+            transform: scale(0.98);
+        }
+        .switch-link {
+            color: var(--yellow);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 1rem;
+            margin-top: 16px;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+        .switch-link:hover {
+            color: #fff200;
+        }
+        .error {
+            color: #ff5252;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1rem;
+            min-height: 22px;
+            transition: opacity 0.3s;
+        }
+        .success {
+            color: #388e3c;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        #main-content {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.7s;
+        }
+        .taxi-divider {
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--yellow), var(--yellow) 16px, var(--black) 16px, var(--black) 32px);
+            border-radius: 2px;
+            margin: 24px 0 18px 0;
+            opacity: 0.7;
+        }
+        @media (max-width: 500px) {
+            .container { padding: 24px 6vw 18px 6vw; }
+            .logo-text { font-size: 1.2rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="bg-pattern"></div>
-    <div class="overlay" id="overlay"></div>
-    <div>
-      <div class="header">
-        <span class="brand">ТАКСИ ПРЕСТИЖ</span>
-      </div>
-      <div class="dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-      <div class="main">
-        <div class="title">Premium<br>car rental</div>
-        <div class="subtitle">Rent the car of your dreams<br>with home delivery</div>
-        <img src="car.png" alt="Car" class="car-image">
-      </div>
+    <div class="taxi-bg"></div>
+    <div class="container">
+        <div class="logo">
+            <span class="logo-icon"><i class="fa-solid fa-taxi"></i></span>
+            <span class="logo-text">Такси Престиж</span>
+        </div>
+        <h1 id="form-title">Регистрация</h1>
+        <div class="taxi-divider"></div>
+        <div id="error-message" class="error"></div>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="phone"><i class="fa-solid fa-phone"></i> Номер телефона</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7 999 123-45-67" required pattern="\+7\s?\d{3}\s?\d{3}-?\d{2}-?\d{2}">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fa-solid fa-lock"></i> Пароль</label>
+                <input type="password" id="password" name="password" placeholder="Пароль" required minlength="6">
+            </div>
+            <button type="submit"><i class="fa-solid fa-user-plus"></i> Зарегистрироваться</button>
+            <div class="switch-link" id="to-login">Уже есть аккаунт? Войти</div>
+        </form>
+        <form id="login-form" style="display:none;">
+            <div class="form-group">
+                <label for="login-phone"><i class="fa-solid fa-phone"></i> Номер телефона</label>
+                <input type="tel" id="login-phone" name="login-phone" placeholder="+7 999 123-45-67" required pattern="\+7\s?\d{3}\s?\d{3}-?\d{2}-?\d{2}">
+            </div>
+            <div class="form-group">
+                <label for="login-password"><i class="fa-solid fa-lock"></i> Пароль</label>
+                <input type="password" id="login-password" name="login-password" placeholder="Пароль" required minlength="6">
+            </div>
+            <button type="submit"><i class="fa-solid fa-sign-in-alt"></i> Войти</button>
+            <div class="switch-link" id="to-register">Нет аккаунта? Зарегистрироваться</div>
+        </form>
+        <div id="main-content">
+            <h2 style="color:var(--yellow);margin-bottom:12px;"><i class="fa-solid fa-circle-check"></i> Добро пожаловать!</h2>
+            <p style="color:#fff;">Вы успешно вошли в систему.</p>
+            <button onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</button>
+        </div>
     </div>
-    <div class="footer">
-      <button class="get-started-btn" id="orderBtn">Заказать такси</button>
-    </div>
-  </div>
-  <div class="yellow-fill" id="yellowFill"></div>
-  <audio id="carSound" src="car.mp3" preload="auto"></audio>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const btn = document.getElementById('orderBtn');
-      const overlay = document.getElementById('overlay');
-      const car = document.querySelector('.car-image');
-      const carSound = document.getElementById('carSound');
-      const yellowFill = document.getElementById('yellowFill');
-      
-      console.log('Elements found:', {btn, overlay, car, carSound, yellowFill});
-      
-      if (btn) {
-        btn.addEventListener('click', function() {
-          console.log('Button clicked!');
-          car.classList.add('animate');
-          if (carSound) {
-            carSound.currentTime = 0;
-            carSound.play().catch(e => console.log('Audio play error:', e));
-          }
-          setTimeout(() => {
-            if (yellowFill) {
-              yellowFill.classList.add('active');
-              console.log('Yellow fill activated');
+    <script>
+        // === ВСТАВЬТЕ СЮДА СВОЙ URL и API TOKEN NocoDB ===
+        const NOCODB_API_URL = 'https://app.nocodb.com/api/v2/tables/mqeutwuzi6xcgzm/records';
+        const NOCODB_API_TOKEN = 'yspnh53Npaci_3z-zGrQlZXGxhOuPp6sFOYuXEUs';
+
+        // Проверка авторизации при загрузке
+        document.addEventListener('DOMContentLoaded', async () => {
+            const phone = localStorage.getItem('phone');
+            if (phone) {
+                showMainContent();
             }
-          }, 200);
-          setTimeout(() => {
-            if (overlay) {
-              overlay.classList.add('active');
-              console.log('Overlay activated');
-            }
-          }, 1200);
-          setTimeout(() => {
-            window.location.href = 'taxi.html';
-          }, 1800);
         });
-      } else {
-        console.error('Button not found!');
-      }
-    });
-  </script>
+
+        // Переключение форм с анимацией
+        function switchForm(showLogin) {
+            document.getElementById('register-form').style.display = showLogin ? 'none' : 'block';
+            document.getElementById('login-form').style.display = showLogin ? 'block' : 'none';
+            document.getElementById('form-title').textContent = showLogin ? 'Вход' : 'Регистрация';
+            document.getElementById('error-message').textContent = '';
+            document.querySelector('.taxi-divider').style.animation = 'fadeInUp 0.5s';
+        }
+        document.getElementById('to-login').onclick = function() { switchForm(true); };
+        document.getElementById('to-register').onclick = function() { switchForm(false); };
+
+        // Регистрация
+        document.getElementById('register-form').onsubmit = async function(e) {
+            e.preventDefault();
+            document.getElementById('error-message').textContent = '';
+            const phone = document.getElementById('phone').value.replace(/\s|-/g, '');
+            const password = document.getElementById('password').value;
+            if (password.length < 6) {
+                showError('Пароль должен быть не менее 6 символов');
+                return;
+            }
+            // Проверяем, есть ли уже такой пользователь
+            const exists = await findUser(phone);
+            if (exists) {
+                showError('Пользователь с таким номером уже зарегистрирован');
+                return;
+            }
+            // Регистрируем (NocoDB v2 требует поля в объекте fields)
+            const res = await fetch(NOCODB_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'xc-token': NOCODB_API_TOKEN
+                },
+                body: JSON.stringify({ fields: { phone, password } })
+            });
+            if (!res.ok) {
+                let msg = 'Ошибка регистрации';
+                try { const err = await res.json(); msg += ': ' + (err.message || JSON.stringify(err)); } catch {}
+                showError(msg);
+                return;
+            }
+            localStorage.setItem('phone', phone);
+            document.getElementById('register-form').style.display = 'none';
+            // showMainContent();
+            window.location.href = 'taxi.html';
+        };
+
+        // Вход
+        document.getElementById('login-form').onsubmit = async function(e) {
+            e.preventDefault();
+            document.getElementById('error-message').textContent = '';
+            const phone = document.getElementById('login-phone').value.replace(/\s|-/g, '');
+            const password = document.getElementById('login-password').value;
+            const user = await findUser(phone);
+            if (!user) {
+                showError('Пользователь не найден');
+                return;
+            }
+            if (user.password !== password) {
+                showError('Неверный пароль');
+                return;
+            }
+            localStorage.setItem('phone', phone);
+            document.getElementById('login-form').style.display = 'none';
+            showMainContent();
+        };
+
+        async function findUser(phone) {
+            const where = encodeURIComponent(JSON.stringify([["phone", "eq", phone]]));
+            const url = NOCODB_API_URL + `?where=${where}`;
+            const res = await fetch(url, {
+                headers: {
+                    'xc-token': NOCODB_API_TOKEN
+                }
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            if (data && data.list && data.list.length > 0) {
+                return data.list[0].fields;
+            }
+            return null;
+        }
+
+        function showMainContent() {
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('form-title').textContent = '';
+            document.getElementById('error-message').textContent = '';
+        }
+
+        function logout() {
+            localStorage.removeItem('phone');
+            location.reload();
+        }
+
+        function showError(msg) {
+            const err = document.getElementById('error-message');
+            err.textContent = msg;
+            err.style.opacity = 1;
+            err.style.animation = 'shake 0.4s';
+            setTimeout(()=>{err.style.animation='';}, 400);
+        }
+        // Shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes shake { 0%{transform:translateX(0);} 20%{transform:translateX(-8px);} 40%{transform:translateX(8px);} 60%{transform:translateX(-8px);} 80%{transform:translateX(8px);} 100%{transform:translateX(0);} }`;
+        document.head.appendChild(style);
+    </script>
+    <!--
+    === КАК НАСТРОИТЬ ===
+    1. Разверните NocoDB (локально или в облаке).
+    2. Создайте проект и таблицу users (phone text, password text).
+    3. Вставьте свой API URL и токен (если требуется) в переменные NOCODB_API_URL и NOCODB_API_TOKEN.
+    4. Готово! Пользователи будут храниться в вашей базе NocoDB.
+    5. В реальном проекте пароль нужно хранить в виде хэша!
+    -->
 </body>
 </html> 
