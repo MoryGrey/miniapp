@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Такси Престиж | Вход и регистрация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --yellow: #FFD600;
+            --yellow-dark: #FFC400;
+            --black: #191A1E;
+            --gray: #f5f5f5;
+            --input-bg: #232323;
+            --input-border: #FFD600;
+        }
+        body {
+            background: var(--black);
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .taxi-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--black) 100%);
+            opacity: 0.08;
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(25,26,30,0.98);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 370px;
+            width: 100%;
+            padding: 40px 28px 32px 28px;
+            margin: 32px 0;
+            animation: fadeInUp 1s cubic-bezier(.7,0,.3,1);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .logo-icon {
+            font-size: 2.2rem;
+            color: var(--yellow);
+            margin-right: 10px;
+            animation: taxiWiggle 1.5s infinite alternate;
+        }
+        @keyframes taxiWiggle {
+            0% { transform: rotate(-7deg); }
+            100% { transform: rotate(7deg); }
+        }
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--yellow);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        h1 {
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--yellow);
+            font-size: 1rem;
+        }
+        input[type="text"], input[type="password"], input[type="tel"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: #fff;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus, input[type="tel"]:focus {
+            border-color: var(--yellow-dark);
+        }
+        button {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(90deg, var(--yellow) 60%, var(--yellow-dark) 100%);
+            color: var(--black);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(255,214,0,0.10);
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 1px;
+        }
+        button:active {
+            background: var(--yellow-dark);
+            transform: scale(0.98);
+        }
+        .switch-link {
+            color: var(--yellow);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 1rem;
+            margin-top: 16px;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+        .switch-link:hover {
+            color: #fff200;
+        }
+        .error {
+            color: #ff5252;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1rem;
+            min-height: 22px;
+            transition: opacity 0.3s;
+        }
+        .success {
+            color: #388e3c;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        #main-content {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.7s;
+        }
+        .taxi-divider {
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--yellow), var(--yellow) 16px, var(--black) 16px, var(--black) 32px);
+            border-radius: 2px;
+            margin: 24px 0 18px 0;
+            opacity: 0.7;
+        }
+        @media (max-width: 500px) {
+            .container { padding: 24px 6vw 18px 6vw; }
+            .logo-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="taxi-bg"></div>
+    <div class="container">
+        <div class="logo">
+            <span class="logo-icon"><i class="fa-solid fa-taxi"></i></span>
+            <span class="logo-text">Такси Престиж</span>
+        </div>
+        <h1 id="form-title">Регистрация</h1>
+        <div class="taxi-divider"></div>
+        <div id="error-message" class="error"></div>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" id="name" name="name" placeholder="Ваше имя" required minlength="2">
+            </div>
+            <div class="form-group">
+                <label for="phone"><i class="fa-solid fa-phone"></i> Номер телефона</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7 999 123-45-67" required pattern="\+7\s?\d{3}\s?\d{3}-?\d{2}-?\d{2}">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fa-solid fa-lock"></i> Пароль</label>
+                <input type="password" id="password" name="password" placeholder="Пароль" required minlength="6">
+            </div>
+            <button type="submit"><i class="fa-solid fa-user-plus"></i> Зарегистрироваться</button>
+            <div class="switch-link" id="to-login">Уже есть аккаунт? Войти</div>
+        </form>
+        <form id="login-form" style="display:none;">
+            <div class="form-group">
+                <label for="login-phone"><i class="fa-solid fa-phone"></i> Номер телефона</label>
+                <input type="tel" id="login-phone" name="login-phone" placeholder="+7 999 123-45-67" required pattern="\+7\s?\d{3}\s?\d{3}-?\d{2}-?\d{2}">
+            </div>
+            <div class="form-group">
+                <label for="login-password"><i class="fa-solid fa-lock"></i> Пароль</label>
+                <input type="password" id="login-password" name="login-password" placeholder="Пароль" required minlength="6">
+            </div>
+            <button type="submit"><i class="fa-solid fa-sign-in-alt"></i> Войти</button>
+            <div class="switch-link" id="to-register">Нет аккаунта? Зарегистрироваться</div>
+        </form>
+        <div id="main-content">
+            <h2 style="color:var(--yellow);margin-bottom:12px;"><i class="fa-solid fa-circle-check"></i> Добро пожаловать!</h2>
+            <p style="color:#fff;">Вы успешно вошли в систему.</p>
+            <button onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</button>
+        </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDqz-IP1qgXIdPGnOOJ1diy2vcJlWnJA0A",
+        authDomain: "taxi-bbdda.firebaseapp.com",
+        projectId: "taxi-bbdda",
+        storageBucket: "taxi-bbdda.firebasestorage.app",
+        messagingSenderId: "880973833007",
+        appId: "1:880973833007:web:234deca6e3b83b474df7da",
+        measurementId: "G-H224N62NXD"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // Регистрация пользователя
+      async function registerUser(phone, password) {
+        const name = document.getElementById('name').value.trim();
+        const query = await db.collection('users').where('phone', '==', phone).get();
+        if (!query.empty) {
+          showError('Пользователь с таким номером уже зарегистрирован!');
+          return false;
+        }
+        await db.collection('users').add({ phone, password, name });
+        localStorage.setItem('phone', phone);
+        localStorage.setItem('name', name);
+        showSuccessAndAnimate();
+        return true;
+      }
+
+      // Вход пользователя
+      async function loginUser(phone, password) {
+        const query = await db.collection('users')
+          .where('phone', '==', phone)
+          .where('password', '==', password)
+          .get();
+        if (!query.empty) {
+          const userData = query.docs[0].data();
+          localStorage.setItem('phone', phone);
+          localStorage.setItem('name', userData.name || '');
+          showSuccessAndAnimate();
+          return true;
+        } else {
+          showError('Неверный номер или пароль!');
+          return false;
+        }
+      }
+
+      function showSuccessAndAnimate() {
+        // Показываем красивую анимацию (fade out, сообщение, затем переход)
+        const container = document.querySelector('.container');
+        container.style.transition = 'opacity 0.7s cubic-bezier(.7,0,.3,1)';
+        container.style.opacity = '0';
+        setTimeout(() => {
+          document.body.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#191A1E;"><div style='font-size:2.2rem;color:#FFD600;margin-bottom:18px;'><i class='fa-solid fa-taxi fa-bounce'></i></div><div style='color:#fff;font-size:1.3rem;font-weight:600;margin-bottom:10px;'>Добро пожаловать!</div><div style='color:#FFD600;font-size:1.1rem;'>Переход на страницу заказа...</div></div>`;
+        }, 700);
+        setTimeout(() => {
+          window.location.href = 'taxi.html';
+        }, 2000);
+      }
+
+      function showError(msg) {
+        const err = document.getElementById('error-message');
+        if (err) {
+          err.textContent = msg;
+          err.style.opacity = 1;
+          err.style.animation = 'shake 0.4s';
+          setTimeout(()=>{err.style.animation='';}, 400);
+        } else {
+          alert(msg);
+        }
+      }
+    </script>
+    <script>
+        // Переключение форм с анимацией
+        function switchForm(showLogin) {
+            document.getElementById('register-form').style.display = showLogin ? 'none' : 'block';
+            document.getElementById('login-form').style.display = showLogin ? 'block' : 'none';
+            document.getElementById('form-title').textContent = showLogin ? 'Вход' : 'Регистрация';
+            document.getElementById('error-message').textContent = '';
+            document.querySelector('.taxi-divider').style.animation = 'fadeInUp 0.5s';
+        }
+        document.getElementById('to-login').onclick = function() { switchForm(true); };
+        document.getElementById('to-register').onclick = function() { switchForm(false); };
+
+        // Регистрация
+        document.getElementById('register-form').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('error-message').textContent = '';
+            const phone = document.getElementById('phone').value.replace(/\s|-/g, '');
+            const password = document.getElementById('password').value;
+            if (password.length < 6) {
+                showError('Пароль должен быть не менее 6 символов');
+                return;
+            }
+            // Проверяем, есть ли уже такой пользователь
+            registerUser(phone, password);
+        };
+
+        // Вход
+        document.getElementById('login-form').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('error-message').textContent = '';
+            const phone = document.getElementById('login-phone').value.replace(/\s|-/g, '');
+            const password = document.getElementById('login-password').value;
+            loginUser(phone, password);
+        };
+
+        function logout() {
+            localStorage.removeItem('phone');
+            location.reload();
+        }
+    </script>
+    <!--
+    === КАК НАСТРОИТЬ ===
+    1. Разверните NocoDB (локально или в облаке).
+    2. Создайте проект и таблицу users (phone text, password text).
+    3. Вставьте свой API URL и токен (если требуется) в переменные NOCODB_API_URL и NOCODB_API_TOKEN.
+    4. Готово! Пользователи будут храниться в вашей базе NocoDB.
+    5. В реальном проекте пароль нужно хранить в виде хэша!
+    -->
+    <script>
+        // При загрузке сразу показываю форму входа
+        window.addEventListener('DOMContentLoaded', function() {
+          document.getElementById('register-form').style.display = 'none';
+          document.getElementById('login-form').style.display = 'block';
+          document.getElementById('form-title').textContent = 'Вход';
+          document.getElementById('error-message').textContent = '';
+        });
+    </script>
+</body>
+</html> 
